@@ -69,3 +69,15 @@ As the data volume increase, we may have problems with retrivel or search time w
 
 - Fetch all notifications for a user
   SELECT \* FROM notifications where userID=1234
+
+# Stage 3
+
+As the data in the SQL table has grown the search/retrivel times also slowdown, without indexes each rows are checked for the given query, like the studentId field in the given query.
+
+Creating an index is a solution for the problem but creating it on every column is unneccessary as the other developer suggested. Instead we should create an index on columns which are used to fetch rows frequently. Which in this case is `studentID`.
+
+Query:
+SELECT \* FROM notifications
+WHERE notificationType='Placements'
+AND createdAt >= NOW() - INTERVAL 7 DAY
+ORDER BY createdAt ASC

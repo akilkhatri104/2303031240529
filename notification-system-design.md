@@ -81,3 +81,11 @@ SELECT \* FROM notifications
 WHERE notificationType='Placements'
 AND createdAt >= NOW() - INTERVAL 7 DAY
 ORDER BY createdAt ASC
+
+# Stage 4
+
+In order to prevent the load on DB due to notifications being fetched on each page load, I would take measures that would reduce the amount of API calls to the notification systems.
+
+First I would look if there are unneccessary or redundant API calls being made such as if the API call is being made in useEffect I will check if it has a dependancy array because without it, it will run on every render.
+
+I will also implement some caching strategy where I would fetch notifications and then cache it in the app, and then either next fetch would be after some time (ex. 5 mins) or when some action is taken which invalidates the existing cached data. A tradeoff of this method is the user may have to wait for a few minutes before they get some notifications.

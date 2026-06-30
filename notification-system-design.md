@@ -89,3 +89,11 @@ In order to prevent the load on DB due to notifications being fetched on each pa
 First I would look if there are unneccessary or redundant API calls being made such as if the API call is being made in useEffect I will check if it has a dependancy array because without it, it will run on every render.
 
 I will also implement some caching strategy where I would fetch notifications and then cache it in the app, and then either next fetch would be after some time (ex. 5 mins) or when some action is taken which invalidates the existing cached data. A tradeoff of this method is the user may have to wait for a few minutes before they get some notifications.
+
+# Stage 5
+
+The given function is very inefficent, It sends email, saves to DB, and push to app one by one for each student, if any of the action fails there is no fallback to either retry or cleanup other actions.
+
+For example, the 200 students' `send_email` call that failed, it is still possible that the notification is saved to DB and showed in the app.
+
+First I would implement safe guard that make sure either all actions happen or none does. Also I would implement exponential backoff which would ensure that if some action fails it retries after some interval which increases with each try/failure.
